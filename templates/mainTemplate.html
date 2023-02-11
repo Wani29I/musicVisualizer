@@ -1,0 +1,236 @@
+<html>
+  <head>
+    <title>Music Visualiser</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Gloria+Hallelujah&family=Handlee&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css"
+    />
+    <style>
+      body {
+        background-color: #d3e0f0;
+        font-family: "Handlee", cursive;
+        text-align: center;
+      }
+
+      * {
+        font-family: "Handlee", cursive;
+      }
+
+      h1 {
+        color: #3c5a99;
+        font-size: 46px;
+        margin-top: 40px;
+      }
+
+      form {
+        margin: 10px auto;
+        text-align: left;
+        width: 500px;
+        display: flex;
+      }
+
+      input[type="file"] {
+        background-color: #ffffff;
+        border: 1px solid #3c5a99;
+        border-radius: 5px;
+        padding: 10px;
+        width: 100%;
+        margin-right: 10px;
+        font-size: 16px;
+      }
+
+      input[type="submit"] {
+        font-size: 20px;
+        background-color: #3c5a99;
+        border: 0;
+        border-radius: 5px;
+        color: #ffffff;
+        padding: 10px 20px;
+      }
+
+      input[type="submit"][disabled] {
+        opacity: 0.5;
+        cursor: wait;
+      }
+
+      .file-name {
+        margin-top: 40px;
+        font-size: 24px;
+      }
+
+      #color-bar {
+        display: flex;
+        height: 150px;
+        margin: auto;
+        margin-bottom: 40px;
+        width: 80%;
+      }
+
+      #color-bar div {
+        flex: 1;
+      }
+
+      .color-block {
+        background-color: #3c5a99;
+        height: 100%;
+      }
+
+      .message {
+        color: #3c5a99;
+        font-size: 32px;
+        margin: 93px auto;
+      }
+
+      .genre-display {
+        font-size: 20px;
+      }
+
+      .color-box {
+        height: 30px;
+        width: 30px;
+        border-radius: 4px;
+        justify-self: left;
+      }
+
+      .genre-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 2fr 1fr 2fr 1fr 2fr 1fr 2fr 1fr;
+        width: 70%;
+        margin: auto;
+        gap: 10px;
+        margin-top: 20px;
+        align-items: center;
+        justify-items: right;
+      }
+
+      #loading {
+        display: none;
+      }
+
+      #loading img {
+        width: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Music Visualiser</h1>
+    <form method="post" enctype="multipart/form-data">
+      <input type="file" name="file" accept="audio/basic" required />
+      <input name="color0" style="display: none" />
+      <input name="color1" style="display: none" />
+      <input name="color2" style="display: none" />
+      <input name="color3" style="display: none" />
+      <input name="color4" style="display: none" />
+      <input name="color5" style="display: none" />
+      <input name="color6" style="display: none" />
+      <input name="color7" style="display: none" />
+      <input name="color8" style="display: none" />
+      <input name="color9" style="display: none" />
+      <input type="submit" value="Upload" />
+    </form>
+    <div id="loading">
+      <img
+        src="https://media3.giphy.com/media/UrEfC5EKRp4eQZdLSS/giphy.gif?cid=6c09b952663d1cef4b6f47c1c9bb2c602e892915a99ff3e2&rid=giphy.gif&ct=s"
+        alt="Loading..."
+      />
+    </div>
+    <div id="bar-area">
+      {% if colors %}
+      <div class="file-name">{{ filename }}</div>
+      <div id="color-bar">
+        {% for color in colors %}
+        <div class="color-block" style="background-color: {{ color }}"></div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="message">Please input an audio file to convert</div>
+      {% endif %}
+    </div>
+    <div class="genre-grid">
+      <span class="genre-display">Blues:</span>
+      <button id="color-picker-0"></button>
+      <span class="genre-display">Classical:</span>
+      <button id="color-picker-1"></button>
+      <span class="genre-display">Country:</span>
+      <button id="color-picker-2"></button>
+      <span class="genre-display">Disco:</span>
+      <button id="color-picker-3"></button>
+      <span class="genre-display">Hip Hop:</span>
+      <button id="color-picker-4"></button>
+      <span class="genre-display">Jazz:</span>
+      <button id="color-picker-5"></button>
+      <span class="genre-display">Metal:</span>
+      <button id="color-picker-6"></button>
+      <span class="genre-display">Pop:</span>
+      <button id="color-picker-7"></button>
+      <span class="genre-display">Reggae:</span>
+      <button id="color-picker-8"></button>
+      <span class="genre-display">Rock:</span>
+      <button id="color-picker-9"></button>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+      {% if newDefaultRGB %}
+      const defaultRGB = {{newDefaultRGB | safe}}
+      {% else %}
+      const defaultRGB = [
+        "rgba(36, 108, 183, 1)",
+        "rgba(239, 234, 214, 1)",
+        "rgba(132, 202, 235, 1)",
+        "rgba(255, 0, 102, 1)",
+        "rgba(66, 66, 66, 1)",
+        "rgba(255, 159, 120, 1)",
+        "rgba(0, 57, 178, 1)",
+        "rgba(255, 106, 180, 1)",
+        "rgba(102, 204, 0, 1)",
+        "rgba(133, 194, 149, 1)",
+      ];
+      {% endif %}
+
+      defaultRGB.forEach((rgbColor, i) => {
+        const element = document.querySelector(`input[name="color${i}"]`);
+        // Create the Pickr color picker
+        element.value = rgbColor
+        const pickr = Pickr.create({
+          el: `#color-picker-${i}`,
+          theme: "nano",
+          comparison: false,
+          default: rgbColor,
+          components: {
+            preview: true,
+            hue: true,
+            interaction: {
+              input: true,
+              save: true,
+            },
+          },
+        });
+        pickr.on("change", (color) => {
+          element.value = color.toRGBA().toString();
+        });
+      });
+    </script>
+    <script>
+      const form = document.querySelector("form");
+      const loading = document.querySelector("#loading");
+      const barArea = document.querySelector("#bar-area");
+      const submitButton = document.querySelector("input[type='submit']");
+      form.addEventListener("submit", function (event) {
+        loading.style.display = "block";
+        barArea.style.display = "none";
+        submitButton.disabled = true;
+      });
+    </script>
+  </body>
+</html>
