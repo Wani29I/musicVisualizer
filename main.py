@@ -4,21 +4,21 @@ from flask import render_template
 from flask import Flask
 from pymongo import MongoClient
 
-import flask
-import keras
-import librosa
-import numpy
-import pymongo
-import sklearn
-import tensorflow
+# import flask
+# import keras
+# import librosa
+# import numpy
+# import pymongo
+# import sklearn
+# import tensorflow
 
-print("flask",flask.__version__)
-print("keras",keras.__version__)
-print("librosa",librosa.__version__)
-print("numpy",numpy.__version__)
-print("pymongo",pymongo.__version__)
-print("sklearn",sklearn.__version__)
-print("tensorflow",tensorflow.__version__)
+# print("flask",flask.__version__)
+# print("keras",keras.__version__)
+# print("librosa",librosa.__version__)
+# print("numpy",numpy.__version__)
+# print("pymongo",pymongo.__version__)
+# print("sklearn",sklearn.__version__)
+# print("tensorflow",tensorflow.__version__)
 
 client = MongoClient("mongodb+srv://Wani29:Ice.31458@musicvector.xr7hdip.mongodb.net/?retryWrites=true&w=majority")
 
