@@ -4,7 +4,6 @@ import librosa
 import model_preprocess.music_gen_lib as mgl
 from sklearn.metrics import classification_report, confusion_matrix
 import numpy as np
-import librosa
 
 MGCNN = mgl.Music_Genre_CNN(mgl.baseline_model_96)
 MGCNN.load_model("classify_model.h5")
