@@ -3,6 +3,7 @@ from model_preprocess.function_lib import load_test_data, predictTestColor, crea
 from flask import render_template
 from flask import Flask
 from pymongo import MongoClient
+import pprint
 
 # import flask
 # import keras
@@ -27,11 +28,61 @@ musicvectorDb = client.MusicVector.musicvector
 
 mock = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 5, 1, 1, 1, 5, 5, 5, 5, 5, 5, 9, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1, 1, 1, 1, 1, 1, 5, 5, 2, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 5, 1, 1, 5, 5, 5, 5, 2, 5, 5, 5, 1, 5, 9, 9, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 1, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1, 1, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 2, 2, 5, 5, 2, 2, 2, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 1, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1, 5, 5, 5, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 2, 2, 5, 5, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 2, 2, 5, 5, 5, 5, 2, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
+mock2 = [0,0.7954545454545483,0.03743315508021388,0,0,0.15240641711229977,0,0,0,0.014705882352941176]
+
+
+def check_similarity(genreCount):
+    similar_song_dict = {}
+    
+    x = musicvectorDb.aggregate([
+    {
+    '$project': {
+      'song_genre_array': '$song_genre_array',
+      'file_name': '$file_name',
+      'divergent_array': {
+        '$map': {
+          'input': {
+            '$zip': {
+              'inputs': [ "$genre_percentage", genreCount ]
+            }
+          },
+          'as': "zipped",
+          'in': {
+            '$abs': {'$subtract': [ { '$arrayElemAt': [ "$$zipped", 0 ] }, { '$arrayElemAt': [ "$$zipped", 1 ] } ]}
+          }
+        },
+      }
+    }},
+    {'$project':{
+        'file_name': '$file_name',
+        'song_genre_array': '$song_genre_array',
+        'divergent': { '$sum': '$divergent_array'},
+        'similarity_percentage':{
+           '$round': [{'$divide': [{'$subtract': [2, { '$sum': '$divergent_array'} ] }, 2 ]}, 4]
+        },
+      }
+    },
+    {
+        '$sort':{'similarity_percentage': -1}
+    },
+    {
+        '$limit': 11
+    }
+    ])
+    
+    y = list(x)
+    
+    # for i in y:
+    #     print(i['similarity_percentage'])
+    #     print(i['divergent'])
+    
+    return y[1:]
+    
 def store_music_vector(song_genre_array, filename):
     
     # check if already stored
     prevSong = musicvectorDb.find_one({"song_genre_array": song_genre_array})
-    if prevSong : return
+    if prevSong : return prevSong['genre_percentage']
     
     genreCount = [0,0,0,0,0,0,0,0,0,0]
     
@@ -39,7 +90,8 @@ def store_music_vector(song_genre_array, filename):
     
     for genre in song_genre_array:
         genreCount[genre] += unit
-    print(genreCount)
+        
+    # print(genreCount)
     # print(filename)
     
     musicvectorDb.insert_one({
@@ -48,11 +100,13 @@ def store_music_vector(song_genre_array, filename):
         "genre_percentage": genreCount
         })
     
-    return
+    return genreCount
 
 @app.route('/create')
 def create():
-    
+    x = check_similarity(mock2)
+    # pprint.pprint(x)
+    # print(len(x))
     # musicvectorDb.insert_one({0:0})
     return {}
 
@@ -90,7 +144,11 @@ def main_progress():
     
     color_list, genre_list = predictTestColor(x, sr, colorDict)
         
-    store_music_vector(list(genre_list), file.filename)
+    genreCount = store_music_vector(list(genre_list), file.filename)
+    similar_song_array = check_similarity(genreCount)
+    # print(genreCount)
+    
+    # pprint.pprint(similar_song_array)
     
     # print(len(color_list))
     # print(color_list)
@@ -101,7 +159,7 @@ def main_progress():
     defaultRGB = list(colorDict.values())
 
     # Example: return the color bar as a string
-    return render_template('mainTemplate.html', colors=colors, filename=file.filename, newDefaultRGB=defaultRGB)
+    return render_template('mainTemplate.html', genre_list=genre_list, filename=file.filename, newDefaultRGB=defaultRGB, similar_song_array= similar_song_array, genre_percent=genreCount)
     
 
 @app.route('/test', methods=['GET'])
