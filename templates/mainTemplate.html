@@ -17,6 +17,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
       body {
         background-color: #d3e0f0;
@@ -163,6 +164,26 @@
       #loading img {
         width: 300px;
       }
+
+      
+      .like, .dislike {
+        margin-top: 10px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        
+      }
+      
+      .like:hover, .dislike:hover {
+        color: #3498db;
+      }
+
+      .like:disabled, .dislike:disabled {
+        cursor: default;
+        color: #3498db;
+      }
+
     </style>
   </head>
   <body>
@@ -267,7 +288,13 @@
     </div>
     
     {% if similar_song_array %}
+    <div>
     <button id="capture-button">Capture</button>
+    <div class="like-dislike">
+      <button class="like"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg></button>
+      <button class="dislike"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg></button>
+    </div>
+    </div>
     <div class="similar-song-header">similar uploaded song</div>
     {% endif %} {% for similar_song in similar_song_array %}
     <div id="bar-area">
@@ -343,6 +370,33 @@
       const loading = document.querySelector("#loading");
       const barArea = document.querySelector("#bar-area");
       const submitButton = document.querySelector("input[type='submit']");
+      const likeButton = document.querySelector(".like");
+      const dislikeButton = document.querySelector(".dislike");
+      {% if songID %}
+        const songID = "{{songID}}"
+      {% endif %}
+      function reviewSong(isLike){
+        return fetch(`/review?isLike=${isLike}&songID=${songID}`)
+      }
+      
+      likeButton&&likeButton.addEventListener("click", function (event) {
+        likeButton.disabled = true;
+        reviewSong(true).then(()=>{
+          dislikeButton.style.display = "none";
+        }).catch(()=>{
+          likeButton.disabled = false;
+        })
+      });
+
+      dislikeButton&&dislikeButton.addEventListener("click", function (event) {
+        dislikeButton.disabled = true;
+        reviewSong(false).then(()=>{
+          likeButton.style.display = "none";
+        }).catch(()=>{
+          dislikeButton.disabled = false;
+        })
+      });
+
       form.addEventListener("submit", function (event) {
         loading.style.display = "block";
         barArea.style.display = "none";

@@ -4,6 +4,8 @@ from flask import render_template
 from flask import Flask
 from pymongo import MongoClient
 import pprint
+from datetime import datetime, timedelta
+from bson import ObjectId
 
 # import flask
 # import keras
@@ -25,6 +27,7 @@ client = MongoClient("mongodb+srv://Wani29:Ice.31458@musicvector.xr7hdip.mongodb
 
 app = Flask(__name__, template_folder='templates')
 musicvectorDb = client.MusicVector.musicvector
+reviewSongDb = client.MusicVector.reviewSong
 
 mock = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 5, 1, 1, 1, 5, 5, 5, 5, 5, 5, 9, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1, 1, 1, 1, 1, 1, 5, 5, 2, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 5, 1, 1, 5, 5, 5, 5, 2, 5, 5, 5, 1, 5, 9, 9, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 1, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1, 1, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 2, 2, 5, 5, 2, 2, 2, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 1, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1, 5, 5, 5, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 2, 2, 5, 5, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 2, 2, 5, 5, 5, 5, 2, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
@@ -82,7 +85,7 @@ def store_music_vector(song_genre_array, filename):
     
     # check if already stored
     prevSong = musicvectorDb.find_one({"song_genre_array": song_genre_array})
-    if prevSong : return prevSong['genre_percentage']
+    if prevSong : return prevSong['genre_percentage'], str(prevSong['_id'])
     
     genreCount = [0,0,0,0,0,0,0,0,0,0]
     
@@ -94,13 +97,13 @@ def store_music_vector(song_genre_array, filename):
     # print(genreCount)
     # print(filename)
     
-    musicvectorDb.insert_one({
+    songID = musicvectorDb.insert_one({
         "file_name": filename,
         "song_genre_array": song_genre_array,
         "genre_percentage": genreCount
         })
-    
-    return genreCount
+        
+    return genreCount, str(songID.inserted_id)
 
 @app.route('/create')
 def create():
@@ -113,6 +116,38 @@ def create():
 @app.route('/')
 def index():
     return render_template('mainTemplate.html')
+  
+@app.route('/review')
+def reviewResult():
+    
+    args = dict(request.args)
+    review = args['isLike']=='true' 
+    songID = ObjectId(args['songID'])
+    
+    reviewSongDb.insert_one({
+        "review": review,
+        "timestamp": datetime.now(),
+        "songID" : songID
+    })
+ 
+    return {'deatail':'review success'}
+
+@app.route('/getReview')
+def getReviewResult():
+    
+    days = request.args.get('days')
+    queryDislike = {'review': False}
+    queryLike = {'review': True}
+ 
+    if(days):
+        days = datetime.utcnow()-timedelta(days=days)
+        queryLike['timestamp'] = {'$gte':days}
+        queryDislike['timestamp'] = {'$gte':days}
+    
+    like = list(reviewSongDb.find(queryLike))
+    dislike = list(reviewSongDb.find(queryDislike))
+ 
+    return {'like':len(like), 'dislike':len(dislike)}
 
 @app.route('/', methods=['POST'])
 def main_progress():
@@ -144,7 +179,7 @@ def main_progress():
     
     color_list, genre_list = predictTestColor(x, sr, colorDict)
         
-    genreCount = store_music_vector(list(genre_list), file.filename)
+    genreCount, songID = store_music_vector(list(genre_list), file.filename)
     similar_song_array = check_similarity(genreCount)
     # print(genreCount)
     
@@ -159,7 +194,7 @@ def main_progress():
     defaultRGB = list(colorDict.values())
 
     # Example: return the color bar as a string
-    return render_template('mainTemplate.html', genre_list=genre_list, filename=file.filename, newDefaultRGB=defaultRGB, similar_song_array= similar_song_array, genre_percent=genreCount)
+    return render_template('mainTemplate.html', genre_list=genre_list, filename=file.filename, newDefaultRGB=defaultRGB, similar_song_array= similar_song_array, genre_percent=genreCount, songID=songID)
     
 
 @app.route('/test', methods=['GET'])
