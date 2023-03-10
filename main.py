@@ -42,6 +42,7 @@ def check_similarity(genreCount):
     '$project': {
       'song_genre_array': '$song_genre_array',
       'file_name': '$file_name',
+      'youtube_link': '$youtube_link',
       'divergent_array': {
         '$map': {
           'input': {
@@ -58,6 +59,7 @@ def check_similarity(genreCount):
     }},
     {'$project':{
         'file_name': '$file_name',
+        'youtube_link': '$youtube_link',
         'song_genre_array': '$song_genre_array',
         'divergent': { '$sum': '$divergent_array'},
         'similarity_percentage':{
@@ -81,11 +83,7 @@ def check_similarity(genreCount):
     
     return y[1:]
     
-def store_music_vector(song_genre_array, filename):
-    
-    # check if already stored
-    prevSong = musicvectorDb.find_one({"song_genre_array": song_genre_array})
-    if prevSong : return prevSong['genre_percentage'], str(prevSong['_id'])
+def store_music_vector(song_genre_array, link, filename):
     
     genreCount = [0,0,0,0,0,0,0,0,0,0]
     
@@ -98,12 +96,20 @@ def store_music_vector(song_genre_array, filename):
     # print(filename)
     
     songID = musicvectorDb.insert_one({
+        "youtube_link": link,
         "file_name": filename,
         "song_genre_array": song_genre_array,
         "genre_percentage": genreCount
         })
         
     return genreCount, str(songID.inserted_id)
+
+def checkURL(ytLink, colorDict):
+    prevSong = musicvectorDb.find_one({"youtube_link": ytLink})
+    if( prevSong ): 
+        return prevSong['_id'], prevSong['song_genre_array'], prevSong['genre_percentage'], [colorDict[predict] for predict in prevSong['song_genre_array']]
+    
+    return None
 
 @app.route('/create')
 def create():
@@ -152,49 +158,43 @@ def getReviewResult():
 @app.route('/', methods=['POST'])
 def main_progress():
     
-    if 'file' not in request.files:
-        return 'No file part in the request'
-    file = request.files['file']
-    if file.filename == '':
-        return 'No file selected'
-
+    formData = dict(request.form)
     # Preprocess the file to extract features
-    x, sr = load_test_data(file)
     
-    rawColor = dict(request.form)
+    songInp = formData['songInp']
+    
+    x, sr, ytLink, ytTitle = load_test_data(songInp)
     
     colorDict = {
-        0 : rawColor['color0'],
-        1 : rawColor['color1'],
-        2 : rawColor['color2'],
-        3 : rawColor['color3'],
-        4 : rawColor['color4'],
-        5 : rawColor['color5'],
-        6 : rawColor['color6'],
-        7 : rawColor['color7'],
-        8 : rawColor['color8'],
-        9 : rawColor['color9'],
+        0 : formData['color0'],
+        1 : formData['color1'],
+        2 : formData['color2'],
+        3 : formData['color3'],
+        4 : formData['color4'],
+        5 : formData['color5'],
+        6 : formData['color6'],
+        7 : formData['color7'],
+        8 : formData['color8'],
+        9 : formData['color9'],
     }
     # print(colorDict)
     
-    color_list, genre_list = predictTestColor(x, sr, colorDict)
-        
-    genreCount, songID = store_music_vector(list(genre_list), file.filename)
+    songData = checkURL(ytLink, colorDict)
+    
+    if(songData):
+        songID, genre_list, genreCount, color_list = songData
+    else:
+        color_list, genre_list = predictTestColor(x, sr, colorDict)
+        genreCount, songID = store_music_vector(list(genre_list), ytLink, ytTitle)
+    
     similar_song_array = check_similarity(genreCount)
-    # print(genreCount)
-    
-    # pprint.pprint(similar_song_array)
-    
-    # print(len(color_list))
-    # print(color_list)
-    
     
     colors = color_list
     
     defaultRGB = list(colorDict.values())
 
     # Example: return the color bar as a string
-    return render_template('mainTemplate.html', genre_list=genre_list, filename=file.filename, newDefaultRGB=defaultRGB, similar_song_array= similar_song_array, genre_percent=genreCount, songID=songID)
+    return render_template('mainTemplate.html', genre_list=genre_list, filename=ytTitle, newDefaultRGB=defaultRGB, similar_song_array= similar_song_array, genre_percent=genreCount, songID=songID, ytLink=ytLink )
     
 
 @app.route('/test', methods=['GET'])
@@ -219,5 +219,31 @@ def classify_file2():
     
     return render_template('mainTemplate.html', colors=colors, filename='filename', newDefaultRGB=defaultRGB)
 
+def add_song(songInp):
+    
+    x, sr, ytLink, ytTitle = load_test_data(songInp)
+    
+    songData = checkURL(ytLink, colorDict)
+    
+    colorDict = {
+        0 : 0,
+        1 : 0,
+        2 : 0,
+        3 : 0,
+        4 : 0,
+        5 : 0,
+        6 : 0,
+        7 : 0,
+        8 : 0,
+        9 : 0,
+    }
+    
+    if(songData):
+        songID, genre_list, genreCount, color_list = songData
+    else:
+        color_list, genre_list = predictTestColor(x, sr, colorDict)
+        genreCount, songID = store_music_vector(list(genre_list), ytLink, ytTitle)
+
 if __name__ == '__main__':
+        
     app.run(debug=True)

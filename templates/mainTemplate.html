@@ -38,11 +38,11 @@
       form {
         margin: 10px auto;
         text-align: left;
-        width: 500px;
+        width: 700px;
         display: flex;
       }
 
-      input[type="file"] {
+      input[type="text"] {
         background-color: #ffffff;
         border: 1px solid #3c5a99;
         border-radius: 5px;
@@ -189,7 +189,7 @@
   <body>
     <h1>Music Visualiser</h1>
     <form method="post" enctype="multipart/form-data">
-      <input type="file" name="file" accept="audio/basic" required />
+      <input type="text" placeholder="song name / YouTube link" name="songInp" required />
       <input name="color0" style="display: none" />
       <input name="color1" style="display: none" />
       <input name="color2" style="display: none" />
@@ -200,7 +200,7 @@
       <input name="color7" style="display: none" />
       <input name="color8" style="display: none" />
       <input name="color9" style="display: none" />
-      <input type="submit" value="Upload" />
+      <input type="submit" value="search" />
     </form>
 
     <div id="loading">
@@ -212,14 +212,14 @@
     <div id="capture-area">
       <div id="bar-area">
         {% if genre_list %}
-        <div class="file-name">{{ filename }}</div>
+        <a class="file-name" href='{{ytLink}}' target="_blank">{{ filename }}</a>
         <div id="color-bar">
           {% for color in genre_list %}
           <div class="color-block main-bar-{{color}}"></div>
           {% endfor %}
         </div>
         {% else %}
-        <div class="message">Please input .au audio file to convert</div>
+        <div class="message">Simply input your favorite song and let our visualizer bring it to life!</div>
         {% endif %}
       </div>
       <div class="genre-grid">
@@ -299,7 +299,7 @@
     {% endif %} {% for similar_song in similar_song_array %}
     <div id="bar-area">
       <div class="similar-file-name">
-        <div>{{ similar_song.file_name }}</div>
+        <a href='{{similar_song.youtube_link}}' target="_blank">{{ similar_song.file_name }}</a>
         <div>{{ (similar_song.similarity_percentage*100)|abs|round(2) }}%</div>
       </div>
 
