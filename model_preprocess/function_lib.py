@@ -4,6 +4,7 @@ import librosa
 import model_preprocess.music_gen_lib as mgl
 from sklearn.metrics import classification_report, confusion_matrix
 import numpy as np
+import pytube
 
 MGCNN = mgl.Music_Genre_CNN(mgl.baseline_model_96)
 MGCNN.load_model("classify_model.h5")
@@ -16,6 +17,17 @@ def load_test_data(song_file):
     X.append(x[:])
     SR.append(sr)
     return np.asarray(X), np.asarray(SR)
+
+# def load_test_data(yt_link):
+#     X = []
+#     SR = []
+#     yt = pytube.YouTube(yt_link)
+#     audio_stream = yt.streams.filter(only_audio=True).first()
+#     audio_file = audio_stream.download()
+#     x, sr = librosa.load(audio_file, sr=None)
+#     X.append(x[:])
+#     SR.append(sr)
+#     return np.asarray(X), np.asarray(SR)
 
 def predictTestColor(testX, testSR, colorDict):
 
