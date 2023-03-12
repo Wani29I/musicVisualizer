@@ -8,13 +8,13 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install the NVIDIA driver and CUDA toolkit
+# Add NVIDIA package repositories and install the driver and toolkit
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     gnupg2 curl ca-certificates && \
     curl -sL https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add - && \
-    distribution=$(. /etc/os-release;echo $ID$VERSION_ID) && \
-    curl -sL https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | tee /etc/apt/sources.list.d/nvidia-docker.list && \
+    echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64 /" > /etc/apt/sources.list.d/cuda.list && \
+    echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu2004/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
     cuda-drivers \
