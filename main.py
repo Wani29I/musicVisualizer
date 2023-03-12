@@ -259,4 +259,4 @@ def add_song(songInp):
 
 if __name__ == '__main__':
         
-    app.run(debug=True)
+    app.run()
