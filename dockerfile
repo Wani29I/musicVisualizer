@@ -37,4 +37,3 @@ EXPOSE 8080
 
 # Start the Flask app
 CMD ["flask", "run"]
-g
