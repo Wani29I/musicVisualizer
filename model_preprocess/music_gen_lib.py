@@ -434,7 +434,7 @@ class Music_Genre_CNN(object):
             segment = song_mel_spectrogram[:, idx : idx + num_fft_windows]
             segment_list.append(segment)
         segment_array = np.asarray(segment_list)[:, :, :, np.newaxis]
-        predictions = self.model.predict(segment_array, batch_size=len(segment_array), verbose=0)
+        predictions = self.model.predict(segment_array, batch_size=len(segment_array))
         summarized_prediction = np.argmax(predictions.sum(axis=0))
         return(summarized_prediction, predictions)
     
@@ -449,7 +449,7 @@ class Music_Genre_CNN(object):
             segment.append(song_mel_spectrogram[:, minIndex : maxIndex])
             segment_array = np.asarray(segment)[:, :, :, np.newaxis]
             
-            predictions = self.model.predict(segment_array, batch_size=len(segment_array), verbose=0)
+            predictions = self.model.predict(segment_array, batch_size=len(segment_array))
             summarized_prediction = np.argmax(predictions.sum(axis=0))
             predict_array.append(summarized_prediction)
             
@@ -469,7 +469,7 @@ class Music_Genre_CNN(object):
             segment.append(song_mel_spectrogram[:, minIndex : maxIndex])
             segment_array = np.asarray(segment)[:, :, :, np.newaxis]
             
-            predictions = self.model.predict(segment_array, batch_size=len(segment_array), verbose=0)
+            predictions = self.model.predict(segment_array, batch_size=len(segment_array))
             summarized_prediction = np.argmax(predictions.sum(axis=0))
             predict_array.append(summarized_prediction)
             
@@ -490,7 +490,7 @@ class Music_Genre_CNN(object):
             segment_array = np.asarray(segment)[:, :, :, np.newaxis]
             
             # print(segment_array.shape,len(segment_array))
-            predictions = self.model.predict(segment_array, batch_size=len(segment_array), verbose=0)
+            predictions = self.model.predict(segment_array, batch_size=len(segment_array))
             summarized_prediction = np.argmax(predictions.sum(axis=0))
             predict_array.append(summarized_prediction)
             
@@ -510,7 +510,7 @@ class Music_Genre_CNN(object):
             segment.append(song_mel_spectrogram[:, minIndex : maxIndex])
             segment_array = np.asarray(segment)[:, :, :, np.newaxis]
             
-            predictions = self.model.predict(segment_array, batch_size=len(segment_array), verbose=0)
+            predictions = self.model.predict(segment_array, batch_size=len(segment_array))
             summarized_prediction = np.argmax(predictions.sum(axis=0))
             predict_str += str(summarized_prediction)+' '
             
