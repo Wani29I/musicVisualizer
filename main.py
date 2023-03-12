@@ -14,6 +14,8 @@ from bson import ObjectId
 # import pymongo
 # import sklearn
 # import tensorflow
+# import pytube
+# import urllib
 
 # print("flask",flask.__version__)
 # print("keras",keras.__version__)
@@ -22,6 +24,8 @@ from bson import ObjectId
 # print("pymongo",pymongo.__version__)
 # print("sklearn",sklearn.__version__)
 # print("tensorflow",tensorflow.__version__)
+# print("pytube",pytube.__version__)
+# print("urllib",urllib.__version__)
 
 client = MongoClient("mongodb+srv://Wani29:Ice.31458@musicvector.xr7hdip.mongodb.net/?retryWrites=true&w=majority")
 
