@@ -22,7 +22,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy the Flask app code
-COPY app app
+COPY . app
 
 # Set environment variables
 ENV LD_LIBRARY_PATH=/usr/local/cuda-11.1/lib64:/usr/local/cuda/extras/CUPTI/lib64
