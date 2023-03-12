@@ -4,22 +4,24 @@ FROM python:3.9-slim-buster
 # Set the working directory
 WORKDIR /app
 
-# Copy the requirements file and install dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Import NVIDIA repository public key
+RUN curl -sL https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -
 
-# Add NVIDIA package repositories and install the driver and toolkit
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    gnupg2 curl ca-certificates && \
-    curl -sL https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add - && \
-    echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64 /" > /etc/apt/sources.list.d/cuda.list && \
+# Set up the stable repository and update the package list
+RUN echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64 /" > /etc/apt/sources.list.d/cuda.list && \
     echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu2004/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
+    gnupg2 \
+    curl \
+    ca-certificates \
     cuda-drivers \
     cuda-toolkit-11-1 && \
     rm -rf /var/lib/apt/lists/*
+
+# Copy the requirements file and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the Flask app code
 COPY . app
