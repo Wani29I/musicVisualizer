@@ -1,30 +1,30 @@
-# Base image
 FROM python:3.9-slim-buster
+
+# Install curl package
+RUN apt-get update && apt-get install -y curl
 
 # Set the working directory
 WORKDIR /app
-
-# Import NVIDIA repository public key
-RUN curl -sL https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -
-
-# Set up the stable repository and update the package list
-RUN echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64 /" > /etc/apt/sources.list.d/cuda.list && \
-    echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu2004/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-    gnupg2 \
-    curl \
-    ca-certificates \
-    cuda-drivers \
-    cuda-toolkit-11-1 && \
-    rm -rf /var/lib/apt/lists/*
 
 # Copy the requirements file and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Install the NVIDIA driver and CUDA toolkit
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    gnupg2 ca-certificates && \
+    curl -sL https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add - && \
+    distribution=$(. /etc/os-release;echo $ID$VERSION_ID) && \
+    curl -sL https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | tee /etc/apt/sources.list.d/nvidia-docker.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    cuda-drivers \
+    cuda-toolkit-11-1 && \
+    rm -rf /var/lib/apt/lists/*
+
 # Copy the Flask app code
-COPY . app
+COPY app app
 
 # Set environment variables
 ENV LD_LIBRARY_PATH=/usr/local/cuda-11.1/lib64:/usr/local/cuda/extras/CUPTI/lib64
