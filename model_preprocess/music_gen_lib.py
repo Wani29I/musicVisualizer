@@ -9,11 +9,11 @@ from keras.models import Sequential, load_model
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
-import tensorflow as tf
+# import tensorflow as tf
 from keras.utils import np_utils
 from keras import regularizers
 import time
-from tensorflow.keras.layers import Layer
+# from tensorflow.keras.layers import Layer
 import pprint
 
 
