@@ -223,9 +223,7 @@ def add_song(songInp):
     
     x, sr, ytLink, ytTitle = load_test_data(songInp)
     
-    songData = checkURL(ytLink, colorDict)
-    
-    colorDict = {
+    songData = checkURL(ytLink, {
         0 : 0,
         1 : 0,
         2 : 0,
@@ -236,12 +234,23 @@ def add_song(songInp):
         7 : 0,
         8 : 0,
         9 : 0,
-    }
+    })
     
     if(songData):
         songID, genre_list, genreCount, color_list = songData
     else:
-        color_list, genre_list = predictTestColor(x, sr, colorDict)
+        color_list, genre_list = predictTestColor(x, sr, {
+        0 : 0,
+        1 : 0,
+        2 : 0,
+        3 : 0,
+        4 : 0,
+        5 : 0,
+        6 : 0,
+        7 : 0,
+        8 : 0,
+        9 : 0,
+    })
         genreCount, songID = store_music_vector(list(genre_list), ytLink, ytTitle)
 
 if __name__ == '__main__':
