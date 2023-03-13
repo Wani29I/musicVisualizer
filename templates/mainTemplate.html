@@ -372,6 +372,7 @@
       const submitButton = document.querySelector("input[type='submit']");
       const likeButton = document.querySelector(".like");
       const dislikeButton = document.querySelector(".dislike");
+      const likeDislikeButton = document.querySelector(".like-dislike");
       {% if songID %}
         const songID = "{{songID}}"
       {% endif %}
@@ -401,6 +402,9 @@
         loading.style.display = "block";
         barArea.style.display = "none";
         submitButton.disabled = true;
+        if(likeDislikeButton) {
+          likeDislikeButton.style.display = 'none'
+        }
       });
 
       const captureButton = document.getElementById("capture-button");

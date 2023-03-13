@@ -103,7 +103,9 @@ def store_music_vector(song_genre_array, link, filename):
         "youtube_link": link,
         "file_name": filename,
         "song_genre_array": song_genre_array,
-        "genre_percentage": genreCount
+        "genre_percentage": genreCount,
+        "like": 0,
+        "dislike": 0
         })
         
     return genreCount, str(songID.inserted_id)
@@ -131,8 +133,20 @@ def index():
 def reviewResult():
     
     args = dict(request.args)
+    id = ObjectId(args['songID'])
     review = args['isLike']=='true' 
     songID = ObjectId(args['songID'])
+    
+    update_data = {}
+    
+    if review:
+        update_data['like'] = 1
+    else:
+        update_data['dislike'] = 1
+    
+    musicvectorDb.update_one({ '_id': id}, {
+        '$inc': update_data
+    })
     
     reviewSongDb.insert_one({
         "review": review,
