@@ -53,16 +53,21 @@ def load_test_data(yt_link):
     
     return np.asarray(X), np.asarray(SR), yt_link, video_title
 
-def predictTestColor(testX, testSR, colorDict):
+def predictTestColor(testX, testSR, colorDict, song_duration):
 
     newTestX = mgl.batch_mel_spectrogram(testX, testSR)
     newTestX = np.log(newTestX+1)
     newTestX = newTestX[:, :, :, np.newaxis]
+    # print('song data after mel: ',newTestX.shape[1])
     
-    predict_test1 = MGCNN.new_song_spectrogram_prediction_mid(newTestX[0])
+    window_size = int(newTestX[0].shape[1]/song_duration)
+    # print(window_size)
+    
+    predict_test1 = MGCNN.new_song_spectrogram_prediction_mid(newTestX[0], window_size)
     
     predict_test1 = [int(predict) for predict in predict_test1]
     cmapColorList1 = [colorDict[predict] for predict in predict_test1]
+    
         
     return cmapColorList1, predict_test1
 

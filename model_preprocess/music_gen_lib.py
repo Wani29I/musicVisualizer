@@ -3,8 +3,8 @@
 # import modules
 from __future__ import print_function
 import os
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
+# os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
+# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 import numpy as np
 import librosa
 import keras
@@ -16,7 +16,7 @@ import tensorflow as tf
 from keras.utils import np_utils
 from keras import regularizers
 import time
-from tensorflow.keras.layers import Layer
+# from tensorflow.keras.layers import Layer
 import pprint
 
 
@@ -474,13 +474,14 @@ class Music_Genre_CNN(object):
             
         return(predict_array)
     
-    def new_song_spectrogram_prediction_mid(self, song_mel_spectrogram):
+    def new_song_spectrogram_prediction_mid(self, song_mel_spectrogram, window_size):
         predict_array = []
         
-        minIndex = 192
-        maxIndex = 704
+        minIndex = window_size
+        maxIndex = window_size+512
+        # print(song_mel_spectrogram.shape[1])
         
-        while( maxIndex < (song_mel_spectrogram.shape[1] - 320)):        
+        while( maxIndex < (song_mel_spectrogram.shape[1] )):        
             segment = []
             segment.append(song_mel_spectrogram[:, minIndex : maxIndex])
             segment_array = np.asarray(segment)[:, :, :, np.newaxis]
@@ -490,7 +491,7 @@ class Music_Genre_CNN(object):
             summarized_prediction = np.argmax(predictions.sum(axis=0))
             predict_array.append(summarized_prediction)
             
-            minIndex += 64
-            maxIndex += 64
+            minIndex += window_size
+            maxIndex += window_size
             
         return(predict_array)
