@@ -195,36 +195,29 @@
         cursor: default;
         color: #3498db;
       }
+
+      button.home {
+        cursor: default;
+        color: #3498db;
+        position: fixed;
+        right: 16px;
+        top: 16px;
+        font-size: 28px;
+        border-radius: 8px;
+        font-weight: bold;
+        vertical-align: middle;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
+    <a class="home" href="/">
+      <button class="home">
+        <i class="fa-solid fa-house"></i>
+        HOME
+      </button>
+    </a>
     <h1>Music Visualizer</h1>
-    <form method="post" enctype="multipart/form-data">
-      <input
-        type="text"
-        placeholder="song name / YouTube link"
-        name="songInp"
-        required
-      />
-      <input name="color0" style="display: none" />
-      <input name="color1" style="display: none" />
-      <input name="color2" style="display: none" />
-      <input name="color3" style="display: none" />
-      <input name="color4" style="display: none" />
-      <input name="color5" style="display: none" />
-      <input name="color6" style="display: none" />
-      <input name="color7" style="display: none" />
-      <input name="color8" style="display: none" />
-      <input name="color9" style="display: none" />
-      <input type="submit" value="search" />
-    </form>
-
-    <div id="loading">
-      <img
-        src="https://media3.giphy.com/media/UrEfC5EKRp4eQZdLSS/giphy.gif?cid=6c09b952663d1cef4b6f47c1c9bb2c602e892915a99ff3e2&rid=giphy.gif&ct=s"
-        alt="Loading..."
-      />
-    </div>
     <div id="capture-area">
       <div id="bar-area">
         {% if genre_list %}
@@ -403,9 +396,7 @@
 
         changeBackgroundColor(barClass, rgbColor)
 
-          const element = document.querySelector(`input[name="color${i}"]`);
           // Create the Pickr color picker
-          element.value = rgbColor
           const pickr = Pickr.create({
             el: `#color-picker-${i}`,
             theme: "nano",
@@ -422,15 +413,11 @@
           });
           pickr.on("change", (color) => {
           changeBackgroundColor(barClass, color.toRGBA().toString())
-            element.value = color.toRGBA().toString();
           });
         });
     </script>
     <script>
-      const form = document.querySelector("form");
-      const loading = document.querySelector("#loading");
       const barArea = document.querySelector("#bar-area");
-      const submitButton = document.querySelector("input[type='submit']");
       const likeButton = document.querySelector(".like");
       const dislikeButton = document.querySelector(".dislike");
       const likeDislikeButton = document.querySelector(".like-dislike");
@@ -457,15 +444,6 @@
         }).catch(()=>{
           dislikeButton.disabled = false;
         })
-      });
-
-      form.addEventListener("submit", function (event) {
-        loading.style.display = "block";
-        barArea.style.display = "none";
-        submitButton.disabled = true;
-        if(likeDislikeButton) {
-          likeDislikeButton.style.display = 'none'
-        }
       });
 
       const captureButton = document.getElementById("capture-button");

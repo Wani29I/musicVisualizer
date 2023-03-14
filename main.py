@@ -1,31 +1,10 @@
 from flask import Flask, request
-from model_preprocess.function_lib import load_test_data, predictTestColor, create_color_bar
+from model_preprocess.function_lib import load_test_data, predictTestColor
 from flask import render_template
 from flask import Flask
 from pymongo import MongoClient
-import pprint
 from datetime import datetime, timedelta
 from bson import ObjectId
-
-# import flask
-# import keras
-# import librosa
-# import numpy
-# import pymongo
-# import sklearn
-# import tensorflow
-# import pytube
-# import urllib
-
-# print("flask",flask.__version__)
-# print("keras",keras.__version__)
-# print("librosa",librosa.__version__)
-# print("numpy",numpy.__version__)
-# print("pymongo",pymongo.__version__)
-# print("sklearn",sklearn.__version__)
-# print("tensorflow",tensorflow.__version__)
-# print("pytube",pytube.__version__)
-# print("urllib",urllib.__version__)
 
 client = MongoClient("mongodb+srv://Wani29:Ice.31458@musicvector.xr7hdip.mongodb.net/?retryWrites=true&w=majority")
 
@@ -33,13 +12,7 @@ app = Flask(__name__, template_folder='templates')
 musicvectorDb = client.MusicVector.newMusicvector
 reviewSongDb = client.MusicVector.reviewSong
 
-mock = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 5, 1, 1, 1, 5, 5, 5, 5, 5, 5, 9, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1, 1, 1, 1, 1, 1, 5, 5, 2, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 5, 1, 1, 5, 5, 5, 5, 2, 5, 5, 5, 1, 5, 9, 9, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 1, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1, 1, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 2, 2, 5, 5, 2, 2, 2, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 1, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1, 5, 5, 5, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 2, 2, 5, 5, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 2, 2, 5, 5, 5, 5, 2, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-
-mock2 = [0,0.7954545454545483,0.03743315508021388,0,0,0.15240641711229977,0,0,0,0.014705882352941176]
-
-
 def check_similarity(genreCount):
-    similar_song_dict = {}
     
     x = musicvectorDb.aggregate([
     {
@@ -117,13 +90,12 @@ def checkURL(ytLink, colorDict):
     
     return None
 
-@app.route('/create')
-def create():
-    x = check_similarity(mock2)
-    # pprint.pprint(x)
-    # print(len(x))
-    # musicvectorDb.insert_one({0:0})
-    return {}
+def getSongById(song_id, colorDict):
+    prevSong = musicvectorDb.find_one({"_id": ObjectId(song_id)})
+    if( prevSong ): 
+        return prevSong['_id'], prevSong['song_genre_array'], prevSong['genre_percentage'], [colorDict[predict] for predict in prevSong['song_genre_array']], prevSong['file_name'],prevSong['youtube_link']
+    
+    return None
 
 @app.route('/')
 def index():
@@ -173,6 +145,42 @@ def getReviewResult():
  
     return {'like':len(like), 'dislike':len(dislike)}
 
+@app.route('/song/<song_id>', methods=['GET'])
+def main_progress2(song_id: str):
+
+    formData = dict(request.args)
+    
+    
+    colorDict = {
+        0 : formData.get('color0',"rgba(36, 108, 183, 1)"),
+        1 : formData.get('color1',"rgba(239, 234, 214, 1)"),
+        2 : formData.get('color2',"rgba(132, 202, 235, 1)"),
+        3 : formData.get('color3',"rgba(255, 0, 102, 1)"),
+        4 : formData.get('color4',"rgba(66, 66, 66, 1)"),
+        5 : formData.get('color5',"rgba(255, 159, 120, 1)"),
+        6 : formData.get('color6',"rgba(0, 57, 178, 1)"),
+        7 : formData.get('color7',"rgba(255, 106, 180, 1)"),
+        8 : formData.get('color8',"rgba(102, 204, 0, 1)"),
+        9 : formData.get('color9',"rgba(133, 194, 149, 1)"),
+    }
+    # print(colorDict)
+    songData = getSongById(song_id,colorDict)
+
+    
+    if(songData):
+        songID, genre_list, genreCount, color_list,ytTitle ,ytLink= songData
+    else:
+       return '<h1>404 not found</h1>'
+        
+    print('genre_list_num: ',len(genre_list))
+    
+    similar_song_array = check_similarity(genreCount)
+    
+    defaultRGB = list(colorDict.values())
+
+    # Example: return the color bar as a string
+    return render_template('songTemplate.html', genre_list=genre_list, filename=ytTitle, newDefaultRGB=defaultRGB, similar_song_array= similar_song_array, genre_percent=genreCount, songID=songID, ytLink=ytLink )
+    
 @app.route('/', methods=['POST'])
 def main_progress():
     
@@ -214,74 +222,11 @@ def main_progress():
     
     similar_song_array = check_similarity(genreCount)
     
-    colors = color_list
-    
     defaultRGB = list(colorDict.values())
 
     # Example: return the color bar as a string
     return render_template('mainTemplate.html', genre_list=genre_list, filename=ytTitle, newDefaultRGB=defaultRGB, similar_song_array= similar_song_array, genre_percent=genreCount, songID=songID, ytLink=ytLink )
-    
-
-@app.route('/test', methods=['GET'])
-def classify_file2():
-    
-    defaultRGB = [
-        "rgba(36, 108, 183, 1)",
-        "rgba(239, 234, 214, 1)",
-        "rgba(132, 202, 235, 1)",
-        "rgba(255, 0, 102, 1)",
-        "rgba(66, 66, 66, 1)",
-        "rgba(255, 159, 120, 1)",
-        "rgba(0, 57, 178, 1)",
-        "rgba(255, 106, 180, 1)",
-        "rgba(102, 204, 0, 1)",
-        "rgba(133, 194, 149, 1)",
-      ];
-    
-    colors = ['#000000']
-
-    # Example: return the color bar as a string
-    
-    return render_template('mainTemplate.html', colors=colors, filename='filename', newDefaultRGB=defaultRGB)
-
-def add_song(songInp):
-    
-    songData = False
-    
-    x, sr, ytLink, ytTitle = load_test_data(songInp)
-    
-    songData = checkURL(ytLink, {
-        0 : 0,
-        1 : 0,
-        2 : 0,
-        3 : 0,
-        4 : 0,
-        5 : 0,
-        6 : 0,
-        7 : 0,
-        8 : 0,
-        9 : 0,
-    })
-    
-    song_duration = int(len(x[0])/sr)
-    
-    if(songData):
-        songID, genre_list, genreCount, color_list = songData
-    else:
-        color_list, genre_list = predictTestColor(x, sr, {
-        0 : 0,
-        1 : 0,
-        2 : 0,
-        3 : 0,
-        4 : 0,
-        5 : 0,
-        6 : 0,
-        7 : 0,
-        8 : 0,
-        9 : 0,
-    }, song_duration)
-        genreCount, songID = store_music_vector(list(genre_list), ytLink, ytTitle)
 
 if __name__ == '__main__':
         
-    app.run()
+    app.run(debug=True)
