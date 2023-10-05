@@ -27,7 +27,7 @@ from bson import ObjectId
 # print("pytube",pytube.__version__)
 # print("urllib",urllib.__version__)
 
-client = MongoClient("mongodb+srv://Wani29:Ice.31458@musicvector.xr7hdip.mongodb.net/?retryWrites=true&w=majority")
+client = MongoClient("mongodb+srv://@musicvector.xr7hdip.mongodb.net/?retryWrites=true&w=majority")
 
 app = Flask(__name__, template_folder='templates')
 musicvectorDb = client.MusicVector.newMusicvector
